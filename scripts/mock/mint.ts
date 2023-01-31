@@ -14,9 +14,10 @@ export default async function main(
   { address, amount, contract }: TaskArgs
 ) {
   let tokenIds: number[] = [];
-  const usedIds = JSON.parse(
-    fs.readFileSync("./scripts/mock/usedIds.json", "utf8")
-  );
+  const usedIdsPath = `./scripts/mock/${
+    contract === "seekers" ? "usedIdsSeekers" : "usedIdsTNL"
+  }.json`;
+  const usedIds = JSON.parse(fs.readFileSync(usedIdsPath, "utf8"));
 
   console.log(`Minting ${amount} mock to address: ${address}`);
   try {
@@ -38,17 +39,11 @@ export default async function main(
     }
 
     console.log("writing to usedIds.json");
-    fs.writeFileSync(
-      "./scripts/mock/usedIds.json",
-      JSON.stringify(tokenIds.concat(usedIds))
-    );
+    fs.writeFileSync(usedIdsPath, JSON.stringify(tokenIds.concat(usedIds)));
   } catch (err) {
     console.log(err);
     console.log("writing to usedIds.json");
-    fs.writeFileSync(
-      "./scripts/mock/usedIds.json",
-      JSON.stringify(tokenIds.concat(usedIds))
-    );
+    fs.writeFileSync(usedIdsPath, JSON.stringify(tokenIds.concat(usedIds)));
     process.exit(1);
   }
 }

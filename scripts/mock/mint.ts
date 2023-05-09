@@ -19,15 +19,15 @@ export default async function main(
   }.json`;
   const usedIds = JSON.parse(fs.readFileSync(usedIdsPath, "utf8"));
 
-  console.log(`Minting ${amount} mock to address: ${address}`);
+  const _contract = contract === "seekers" ? "TestSeekers" : "GoerliTNL";
+
+  console.log(`Minting ${amount} ${_contract} to address: ${address}`);
   try {
     for (let i = 0; i < amount; i++) {
       tokenIds.push(getRandomTokenId(1, 5661, usedIds));
     }
 
-    const MockFactory = await ethers.getContractFactory(
-      contract === "seekers" ? "TestSeekers" : "GoerliTNL"
-    );
+    const MockFactory = await ethers.getContractFactory(_contract);
     const mock = MockFactory.attach(
       contract === "seekers" ? SeekersAddress : TnlAddress
     );
@@ -40,8 +40,10 @@ export default async function main(
 
     console.log("writing to usedIds.json");
     fs.writeFileSync(usedIdsPath, JSON.stringify(tokenIds.concat(usedIds)));
-  } catch (err) {
+  } catch (err: any) {
     console.log(err);
+    if (err?.message?.includes("NETWORK_ERROR")) return;
+
     console.log("writing to usedIds.json");
     fs.writeFileSync(usedIdsPath, JSON.stringify(tokenIds.concat(usedIds)));
     process.exit(1);

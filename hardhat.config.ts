@@ -2,7 +2,6 @@ import "@nomicfoundation/hardhat-toolbox";
 import "@nomiclabs/hardhat-ethers";
 import { config as dotenv } from "dotenv";
 import { task, types } from "hardhat/config";
-import { HardhatUserConfig } from "hardhat/config";
 
 dotenv();
 
@@ -16,7 +15,7 @@ task("mock_mint", "Mints seekers to an address")
     await mock_mint(ethers, taskArgs);
   });
 
-const config: HardhatUserConfig = {
+const config = {
   solidity: {
     version: "0.8.17",
     settings: {
@@ -31,9 +30,6 @@ const config: HardhatUserConfig = {
       url: `https://goerli.infura.io/v3/${process.env.INFURA_API_TOKEN}`,
       accounts: [`0x${process.env.ETH_ACCOUNT_KEY}`],
     },
-  },
-  etherscan: {
-    apiKey: "TJ1MBI2J7FEICQY3GHNY8G8SXZ51UHSCZC",
   },
 };
 

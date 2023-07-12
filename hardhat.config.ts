@@ -28,7 +28,7 @@ const config = {
   networks: {
     goerli: {
       url: `https://goerli.infura.io/v3/${process.env.INFURA_API_TOKEN}`,
-      accounts: [`0x${process.env.ETH_ACCOUNT_KEY}`],
+      accounts: [process.env.ETH_ACCOUNT_KEY],
     },
   },
 };
